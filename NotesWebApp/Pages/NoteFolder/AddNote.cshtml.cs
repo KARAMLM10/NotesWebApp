@@ -29,44 +29,6 @@ namespace NotesWebApp.Pages.NoteFolder
         public async Task<IActionResult> OnPostAsync()
         {
 
-            //try
-            //{
-            //    if (!ModelState.IsValid)
-            //    {
-            //        return Page();
-            //    }
-
-            //    // Kontrollera om det finns bilder att ladda upp
-            //    if (ImageFiles.Any())
-            //    {
-            //        var imageByteArrays = new List<byte[]>();
-
-            //        foreach (var imageFile in ImageFiles)
-            //        {
-            //            using (var memoryStream = new MemoryStream())
-            //            {
-            //                await imageFile.CopyToAsync(memoryStream);
-            //                imageByteArrays.Add(memoryStream.ToArray());
-            //            }
-            //        }
-
-            //        // Spara bilder som byte-arrayer i ett nytt fält
-            //        Note.ImageData = imageByteArrays;
-            //    }
-
-            //    // Sätt CreatedDateTime till nuvarande datum och tid
-            //    Note.CreatedDateTime = DateTime.Now;
-
-            //    await _noteService.AddNoteAsync(Note);
-            //    TempData["SuccessMessage"] = "Note Successfully Saved";
-            //    return Page();
-            //}
-            //catch (Exception ex)
-            //{
-            //    ModelState.AddModelError(string.Empty, "Det gick inte att spara anteckningen. Försök igen.");
-            //    Console.WriteLine(ex.ToString());
-            //    return Page();
-            //}
             try
             {
                 if (!ModelState.IsValid)
@@ -74,8 +36,6 @@ namespace NotesWebApp.Pages.NoteFolder
                     return Page();
                 }
 
-                // Hämta anteckningstexten från Notes-diven
-                //Note.Notes = Request.Form["Notes"]; // Hämta textinnehåll
 
                 // Kontrollera om det finns bilder att ladda upp
                 if (ImageFiles.Any())
@@ -115,55 +75,3 @@ namespace NotesWebApp.Pages.NoteFolder
 
     }
 }
-
-
-
-
-
-
-
-
-//try
-//{
-
-
-
-//    if (!ModelState.IsValid)
-//    {
-//        return Page();
-//    }
-
-//    // Kontrollera om det finns bilder att ladda upp
-//    if (ImageFiles.Any())
-//    {
-//        var imageByteArrays = new List<byte[]>();
-
-//        foreach (var imageFile in ImageFiles)
-//        {
-//            using (var memoryStream = new MemoryStream())
-//            {
-//                await imageFile.CopyToAsync(memoryStream);
-//                imageByteArrays.Add(memoryStream.ToArray());
-//            }
-//        }
-
-//        // Spara bilder som byte-arrayer i ett nytt fält (ex: ImageData eller i en relaterad tabell)
-//        Note.ImageData = imageByteArrays; // Du behöver uppdatera modellen för detta fält.
-//    }
-
-
-
-//    // Sätt CreatedDateTime till nuvarande datum och tid
-//    Note.CreatedDateTime = DateTime.Now;
-
-//    await _noteService.AddNoteAsync(Note);
-//    TempData["SuccessMessage"] = "Note Successfuly Saved";
-//    return Page();
-
-//}
-//catch (Exception ex)
-//{// Logga undantaget
-//    ModelState.AddModelError(string.Empty, "Det gick inte att spara anteckningen. Försök igen.");
-//    Console.WriteLine(ex.ToString());
-//    return Page();
-//}

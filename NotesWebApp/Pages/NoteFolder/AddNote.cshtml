@@ -96,9 +96,8 @@
             border-radius: 5px;
         }
 
-        /* Stil för det redigerbara anteckningsfältet */
         #Notes {
-            color: black; /* Sätter textfärgen till svart */
+            color: black; 
         }
     </style>
 </head>
@@ -118,7 +117,7 @@
         <div>
             <label for="Notes">Notes</label>
             <div id="Notes" contenteditable="true" style="border: 1px solid #170202; padding: 10px; height: 200px; overflow-y: auto;" required>
-                <!-- Här kan användaren skriva sina anteckningar -->
+
             </div>
             <input type="hidden" asp-for="Note.Notes" id="NotesInput" />
         </div>
@@ -164,164 +163,3 @@
 </html>
 
 
-@* 
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hantera Anteckningar</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-image: url('https://www.w3schools.com/w3images/forestbridge.jpg'); /* Bakgrundsbild */
-            background-size: cover;
-            background-repeat: no-repeat;
-            margin: 0;
-            padding: 20px;
-            color: #fff;
-        }
-
-        h2 {
-            text-align: center;
-            color: #fff;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-            margin-bottom: 20px;
-        }
-
-        form {
-            background-color: rgba(255, 255, 255, 0.9); /* Vit bakgrund med transparens */
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        div {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 15px;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus,
-        textarea:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .validation-summary {
-            color: red;
-            margin-bottom: 10px;
-        }
-
-        .popup {
-            display: none; /* Göm popup som standard */
-            background-color: rgba(0, 128, 0, 0.8);
-            color: white;
-            padding: 20px;
-            border: 1px solid green;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            border-radius: 5px;
-        }
-       
-    </style>
-</head>
-<body>
-
-    <h2>Hantera Anteckningar</h2>
-
-    <form method="post" enctype="multipart/form-data">
-        <div>
-            <label for="Title">Titel</label>
-            <input type="text" asp-for="Note.Title" id="Title" required />
-        </div>
-        <div>
-            <label for="ShortDescription">Kort Beskrivning</label>
-            <textarea asp-for="Note.ShortDescription" id="ShortDescription" rows="4" required></textarea>
-        </div>
-        
-        <div>
-            <label for="Notes">Anteckningar</label>
-            <div id="Notes" contenteditable="true" style="border: 1px solid #170202; padding: 10px; height: 200px; overflow-y: auto;" required>
-               
-            </div>
-
-            <input type="hidden" asp-for="Note.Notes" id="NotesInput" />
-        </div>
-
-        <div>
-            <label for="Image">Ladda upp Bilder</label>
-            <input type="file" id="Image" name="ImageFiles" accept="image/*" multiple required />
-        </div>
-
-        <button type="submit">Spara Anteckning</button>
-    </form>
-
-
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div id="success-popup" class="popup">
-            <p>@TempData["SuccessMessage"]</p>
-        </div>
-    }
-
-    <script>
-
-        window.onload = function () {
-            var popup = document.getElementById('success-popup');
-            if (popup) {
-                popup.style.display = 'block'; // Visa popup
-
-                // Omdirigera användaren efter några sekunder (exempelvis 3 sekunder)
-                setTimeout(function () {
-                    window.location.href = '@Url.Page("Index")'; // Omdirigera till Index
-                }, 2000); // Vänta i 5 sekunder
-            }
-        };
-
-        document.querySelector("form").addEventListener("submit", function (e) {
-            var fileInput = document.getElementById("Image");
-            if (!fileInput.value) {
-                e.preventDefault(); // Förhindra formuläret från att skickas
-                alert("Vänligen välj en bildfil att ladda upp.");
-            }
-        });
-    </script>
-
-</body>
-</html> *@

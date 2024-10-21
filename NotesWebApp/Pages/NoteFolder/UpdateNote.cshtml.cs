@@ -42,15 +42,18 @@ namespace NotesWebApp.Pages.NoteFolder
                 return BadRequest("Ogiltigt ID");
             }
 
-            // Uppdatera textinnehållet
+            // Hämta den befintliga anteckningen från databasen
             var existingNote = await _noteService.GetNoteByIdAsync(Note.Id);
             if (existingNote != null)
             {
                 existingNote.Title = Note.Title;
                 existingNote.ShortDescription = Note.ShortDescription;
-                existingNote.Notes = Note.Notes; // Spara anteckningens text
+                existingNote.Notes = Note.Notes; // Uppdatera anteckningens text
 
-                // Kontrollera om nya bilder har laddats upp
+                // Hantera uppdatering av bilder
+                var newImageData = new List<byte[]>();
+
+                // Om användaren har laddat upp nya bilder, lägg till dem
                 if (ImageFiles.Any())
                 {
                     foreach (var imageFile in ImageFiles)
@@ -59,45 +62,29 @@ namespace NotesWebApp.Pages.NoteFolder
                         {
                             await imageFile.CopyToAsync(memoryStream);
                             var imageData = memoryStream.ToArray();
-                            existingNote.ImageData.Add(imageData); // Lägg till varje ny bild i ImageData-listan
+                            newImageData.Add(imageData); // Lägg till ny bilddata i listan
                         }
                     }
                 }
+
+                // Jämför befintliga bilder med de nya och ta bort de som inte längre finns kvar
+                var imagesToRemove = existingNote.ImageData
+                    .Where(oldImage => !newImageData.Any(newImage => newImage.SequenceEqual(oldImage)))
+                    .ToList();
+
+                foreach (var image in imagesToRemove)
+                {
+                    existingNote.ImageData.Remove(image); // Ta bort bilder som inte längre finns med
+                }
+
+                // Lägg till alla nya bilder som användaren har laddat upp
+                existingNote.ImageData.AddRange(newImageData);
 
                 await _noteService.UpdateNoteAsync(existingNote);
             }
 
             return RedirectToPage("/index");
-
-
-
-
         }
+
     }
 }
-
-//if (!ModelState.IsValid)
-//{
-//    return Page();
-//}
-
-//if (Note.Id == 0)
-//{
-//    return BadRequest("Ogiltigt ID");
-//}
-
-//// Kontrollera om nya bilder har laddats upp
-//if (ImageFiles.Any())
-//{
-//    foreach (var imageFile in ImageFiles)
-//    {
-//        using (var memoryStream = new MemoryStream())
-//        {
-//            await imageFile.CopyToAsync(memoryStream);
-//            var imageData = memoryStream.ToArray();
-//            Note.ImageData.Add(imageData); // Lägg till varje ny bild i ImageData-listan
-//        }
-//    }
-//}
-//await _noteService.UpdateNoteAsync(Note);
-//return RedirectToPage("/index");
