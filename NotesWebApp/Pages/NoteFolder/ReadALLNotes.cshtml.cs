@@ -39,7 +39,7 @@ namespace NotesWebApp.Pages.NoteFolder
         public async Task<IActionResult> OnPostDeleteNoteAsync(int id)
         {
             await _noteService.DeleteNoteAsync(id);
-            Message = "Anteckningen har raderats."; // Meddelande som kan visas för användaren
+            Message = "The note has been deleted."; // Meddelande som kan visas för användaren
             return RedirectToPage(); // Återvänd till samma sida för att uppdatera listan
         }
 

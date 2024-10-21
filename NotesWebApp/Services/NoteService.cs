@@ -50,7 +50,6 @@ namespace NotesWebApp.Services
                 {
                     existingNote.ImageData = note.ImageData; // Uppdatera med nya bilder
                 }
-                existingNote.ImagePaths = note.ImagePaths;
 
                 await _context.SaveChangesAsync();
 

@@ -58,6 +58,147 @@
         }
 
         .note-image {
+            max-width: 100%; /* Maxbredd för bilder */
+            height: auto; /* Bevara bildens proportioner */
+            margin-right: 5px; /* Avstånd mellan bilderna */
+            border-radius: 4px; /* Rundade hörn för en mjukare look */
+        }
+
+        .image-container {
+            display: flex; /* Gör bilderna i en rad */
+            flex-wrap: wrap; /* Låt bilderna gå över till nästa rad om det behövs */
+            gap: 5px; /* Avstånd mellan bilderna */
+            margin-top: 5px; /* Avstånd över bilden */
+        }
+
+        .note-section {
+            margin-bottom: 20px; /* Mer utrymme under noteringsavsnittet */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Update Note</h2>
+
+        <div class="note-section">
+            <h3>@Model.Note.Title</h3>
+            <p><strong>Description:</strong> @Model.Note.ShortDescription</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label for="title">Titel</label>
+                <input type="text" class="form-control" id="title" name="Title" value="@Model.Note.Title" required />
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="shortDescription">shortDescription</label>
+                <textarea class="form-control" id="shortDescription" name="ShortDescription" rows="3">@Model.Note.ShortDescription</textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="notes">Notes</label>
+                <div id="notes" contenteditable="true" class="form-control" style="height: 200px; overflow-y: auto;" required>
+                    @Html.Raw(Model.Note.Notes) 
+                </div>
+                <input type="hidden" name="Notes" id="notesInput" /> 
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="imageFiles">Select images</label>
+                <input type="file" class="form-control" id="imageFiles" name="ImageFiles" multiple />
+                <small class="form-text">Select one or more images and upload.</small>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-primary">Update Note</button>
+                <a asp-page="/NoteFolder/ReadALLNotes" class="btn btn-secondary">Back</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Lägger till funktionalitet för att infoga bilder i anteckningsfältet
+        $('#imageFiles').on('change', function () {
+            var files = this.files;
+            var container = $('#notes');
+
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // Infoga bilden i anteckningsfältet
+                    container.append('<img src="' + e.target.result + '" alt="Bild" class="note-image" />');
+                }
+                reader.readAsDataURL(files[i]);
+            }
+        });
+
+        // Sätt värdet i dolda input för anteckningar innan formuläret skickas
+        $('form').on('submit', function() {
+            $('#notesInput').val($('#notes').html()); // Spara innehållet i notesInput
+        });
+    </script>
+</body>
+</html>
+
+
+
+@* 
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uppdatera Anteckning</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #343a40; /* Mörk bakgrund */
+            color: #f8f9fa; /* Ljus text */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Vit bakgrund med opacity */
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        h2, h3 {
+            color: #007bff; /* Ljusblå färg för rubriker */
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #007bff; /* Ljusblå färg för etiketter */
+        }
+
+        .form-text {
+            font-size: 0.9rem;
+            color: #6c757d; /* Ljusgrå färg för beskrivningar */
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .note-image {
             max-width: 900px; /* Maxbredd för bilder */
             height: 400px; /* Bevara bildens proportioner */
             margin-right: 5px; /* Avstånd mellan bilderna */
@@ -124,144 +265,6 @@
             <div class="d-flex justify-content-between mt-4">
                 <button type="submit" class="btn btn-primary">Update Note</button>
                 <a asp-page="/NoteFolder/ReadALLNotes" class="btn btn-secondary">Back</a>
-            </div>
-        </form>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-
-
-
-
-@* <!DOCTYPE html>
-<html lang="sv">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uppdatera Anteckning</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: #343a40;
-        }
-
-        .form-group label {
-            font-weight: bold;
-        }
-
-        .form-text {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-        }
-
-            .btn-primary:hover {
-                background-color: #0056b3;
-            }
-
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-        }
-
-            .btn-secondary:hover {
-                background-color: #5a6268;
-            }
-
-        .note-image {
-            max-width: 800px; /* Maxbredd för bilder */
-            height: auto; /* Bevara bildens proportioner */
-            margin-right: 5px; /* Avstånd mellan bilderna */
-            border-radius: 4px; /* Rundade hörn för en mjukare look */
-            display: inline-block; /* Gör så att bilderna står i rad */
-        }
-
-        .image-container {
-            display: flex; /* Gör bilderna i en rad */
-            flex-wrap: wrap; /* Låt bilderna gå över till nästa rad om det behövs */
-            gap: 5px; /* Avstånd mellan bilderna */
-            margin-top: 5px; /* Avstånd över bilden */
-           
-        }
-
-        .note-section {
-            margin-bottom: 20px; /* Mer utrymme under noteringsavsnittet */
-        }
-
-       
-    </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <h2>Uppdatera Anteckning</h2>
-
-        <div class="note-section">
-            <h3>@Model.Note.Title</h3>
-            <p><strong>Beskrivning:</strong> @Model.Note.ShortDescription</p>
-
-            <div>
-                <strong>Bilder:</strong>
-              
-                <div>
-
-                    <div class="image-container">
-                        @if (Model.Note.ImageData != null && Model.Note.ImageData.Count > 0)
-                        {
-                            foreach (var imageData in Model.Note.ImageData)
-                            {
-                                <img src="data:image/png;base64,@Convert.ToBase64String(imageData)" alt="Bild" class="note-image" />
-                            }
-                        }
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group mb-3">
-                <label for="title">Titel</label>
-                <input type="text" class="form-control" id="title" name="Title" value="@Model.Note.Title" required />
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="shortDescription">Kort Beskrivning</label>
-                <textarea class="form-control" id="shortDescription" name="ShortDescription" rows="3">@Model.Note.ShortDescription</textarea>
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="notes">Notes</label>
-                <textarea class="form-control" id="notes" name="Notes" rows="5">@Model.Note.Notes</textarea>
-            </div>
-
-            <div class="form-group mb-3">
-                <label for="imageFiles">Välj Ny Bild</label>
-                <input type="file" class="form-control" id="imageFiles" name="ImageFiles" multiple />
-                <small class="form-text">Välj en eller flera bilder att ladda upp.</small>
-            </div>
-
-
-            <div class="d-flex justify-content-between mt-4">
-                <button type="submit" class="btn btn-primary">Uppdatera Anteckning</button>
-                <a asp-page="/NoteFolder/ReadALLNotes" class="btn btn-secondary">Tillbaka</a>
             </div>
         </form>
     </div>
