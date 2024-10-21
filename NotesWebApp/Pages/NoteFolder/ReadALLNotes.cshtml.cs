@@ -13,7 +13,7 @@ namespace NotesWebApp.Pages.NoteFolder
 
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-
+        public string SearchTerm { get; set; }
 
         [TempData]
         public string Message { get; set; }
@@ -23,17 +23,25 @@ namespace NotesWebApp.Pages.NoteFolder
             _noteService = noteService;
         }
 
-        public async Task OnGetAsync(int pageNumber = 1)
+        public async Task OnGetAsync(string searchTerm, int pageNumber = 1)
         {
-            if (pageNumber < 1)
+
+            try
             {
-                pageNumber = 1;
+
+                SearchTerm = searchTerm;
+                if (pageNumber < 1)
+                {
+                    pageNumber = 1;
+                }
+                int pageSize = 5;
+                Notes = await _noteService.GetNotesByPageAsync(pageNumber, pageSize, searchTerm);
+                int totalNotes = await _noteService.GetTotalNotesCountAsync(searchTerm);
+                TotalPages = (int)Math.Ceiling(totalNotes / (double)pageSize);
+                CurrentPage = pageNumber;
             }
-            int pageSize = 5;
-            Notes = await _noteService.GetNotesByPageAsync(pageNumber, pageSize);
-            int totalNotes = await _noteService.GetTotalNotesCountAsync();
-            TotalPages = (int)Math.Ceiling(totalNotes / (double)pageSize);
-            CurrentPage = pageNumber;
+            catch (Exception ex) { Console.WriteLine(ex + "error"); }
+
             //Notes = await _noteService.GetALLNotesAsync();
         }
         public async Task<IActionResult> OnPostDeleteNoteAsync(int id)

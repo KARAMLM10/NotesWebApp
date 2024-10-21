@@ -17,15 +17,40 @@ namespace NotesWebApp.Services
             await _context.Notes.AddAsync(note);
             await _context.SaveChangesAsync();
         }
-        public async Task<List<Note>> GetNotesByPageAsync(int pageNumber, int pageSize)
+        
+        public async Task<List<Note>> GetNotesByPageAsync(int pageNumber, int pageSize, string searchTerm)
         {
-            return await _context.Notes
-                           .OrderByDescending(n => n.CreatedDateTime) // Sortera senaste först
-                           .Skip((pageNumber - 1) * pageSize)
-                           .Take(pageSize)
-                           .ToListAsync();
-        }
+            var query = _context.Notes.AsQueryable();
 
+            // Filtrera med söktermen om den inte är tom
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(n =>
+                    n.Title.Contains(searchTerm) ||
+                    n.ShortDescription.Contains(searchTerm));
+            }
+
+            // Använd query för paginering och sortering
+            return await query
+                           .OrderByDescending(n => n.CreatedDateTime) // Sortera nyaste först
+                           .Skip((pageNumber - 1) * pageSize) // Hoppa över anteckningar för tidigare sidor
+                           .Take(pageSize) // Ta det antal anteckningar som passar på sidan
+                           .ToListAsync(); // Hämta resultatet som en lista
+        }
+        public async Task<int> GetTotalNotesCountAsync(string searchTerm)
+        {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                return await _context.Notes
+                    .CountAsync(n =>
+                        n.Title.Contains(searchTerm) ||
+                        n.ShortDescription.Contains(searchTerm) );
+            }
+            else
+            {
+                return await _context.Notes.CountAsync();
+            }
+        }
         public async Task<int> GetTotalNotesCountAsync()
         {
             return await _context.Notes.CountAsync();
