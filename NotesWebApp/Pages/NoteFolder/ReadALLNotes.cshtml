@@ -69,7 +69,19 @@
                 @Model.Message
             </div>
         }
+        <form method="get">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search notes..." name="SearchTerm" value="@Model.SearchTerm">
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
 
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success">
+                @Model.Message
+            </div>
+        }
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
